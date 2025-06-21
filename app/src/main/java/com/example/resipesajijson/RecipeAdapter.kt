@@ -10,55 +10,45 @@ import com.bumptech.glide.Glide
 import com.example.resipesajijson.model.DataItem
 
 class RecipeAdapter (private val recipes: MutableList<DataItem>) : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
-        /**
-         * ViewHolder berisi referensi ke view-view di dalam setiap item layout (item_list_recipe.xml).
-         */
-        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val tvRecipeName: TextView = view.findViewById(R.id.tvRecipeName)
-            val ivRecipeImage: ImageView = view.findViewById(R.id.ivRecipeImage)
-        }
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvRecipeName: TextView = view.findViewById(R.id.tvRecipeName)
+        val ivRecipeImage: ImageView = view.findViewById(R.id.ivRecipeImage)
+        val tvIngredients: TextView = view.findViewById(R.id.tvIngredients)
+        val tvInstructions: TextView = view.findViewById(R.id.tvInstructions)
+        //val tvCuisine: TextView = view.findViewById(R.id.tvCuisine)
+    }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_list_recipe, parent, false)
-            return ViewHolder(view)
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_list_recipe, parent, false)
+        return ViewHolder(view)
+    }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val recipe = recipes[position]
-            holder.tvRecipeName.text = recipe.name
-            Glide.with(holder.itemView.context)
-                .load(recipe.image)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
-                .into(holder.ivRecipeImage)
-        }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val recipe = recipes[position]
+        holder.tvRecipeName.text = recipe.name
+        Glide.with(holder.itemView.context)
+            .load(recipe.image)
+            .into(holder.ivRecipeImage)
 
-        override fun getItemCount() = recipes.size
+        // Baris untuk mengisi tvCuisine dihapus dari sini
 
-        /**
-         * Fungsi untuk menambah satu resep baru ke dalam daftar.
-         */
-        fun addRecipe(newRecipe: DataItem) {
-            recipes.add(newRecipe)
-            notifyItemInserted(recipes.lastIndex) // Animasi yang lebih efisien
-        }
+        // Mengubah List<String> menjadi satu String dengan pemisah baris baru dan bullet point
+        val ingredientsText = recipe.ingredients.joinToString(separator = "\n") { "• $it" }
+        holder.tvIngredients.text = ingredientsText
 
-        /**
-         * Fungsi untuk mengganti seluruh data dengan yang baru.
-         * Ini berguna saat pertama kali memuat data atau saat melakukan refresh.
-         */
-        fun updateAll(newRecipes: List<DataItem>) {
-            recipes.clear()
-            recipes.addAll(newRecipes)
-            notifyDataSetChanged()
-        }
+        // Mengubah List<String> menjadi satu String dengan nomor
+        val instructionsText = recipe.instructions.mapIndexed { index, instruction ->
+            "${index + 1}. $instruction"
+        }.joinToString(separator = "\n")
+        holder.tvInstructions.text = instructionsText
+    }
 
-        /**
-         * Fungsi untuk menghapus semua data dari daftar.
-         */
-        fun clear() {
-            recipes.clear()
-            notifyDataSetChanged()
-        }
+    override fun getItemCount() = recipes.size
+
+    fun updateAll(newRecipes: List<DataItem>) {
+        recipes.clear()
+        recipes.addAll(newRecipes)
+        notifyDataSetChanged()
+    }
 }
