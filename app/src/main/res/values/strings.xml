@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ResipesAjiJSON</string>
+    <!-- res/values/strings.xml -->
+    <string name="recipe_image_description">Gambar Resep</string>
+    <string name="ingredients_label">Bahan-bahan:</string>
+    <string name="instructions_label">Instruksi:</string>
+
+</resources>
