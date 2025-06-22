@@ -14,15 +14,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ResipesAjiJSON"
         tools:targetApi="31">
+
+        <!-- DIUBAH: Menambahkan .ui. ke path name jika file berada di dalam package ui -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- DIUBAH: Menambahkan .ui. ke path name dan exported="false" sebagai praktik terbaik -->
+        <activity
+            android:name=".DetailActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
